@@ -101,6 +101,10 @@ def Testset(lines):
             for wrong in wrongs.split()]
 
 if __name__ == '__main__':
-    print(unit_tests())
-    spelltest(Testset(open('spell-testset1.txt')))
-    spelltest(Testset(open('spell-testset2.txt')))
+    print(correction("speling"))
+
+
+
+    #print(unit_tests())
+    #spelltest(Testset(open('spell-testset1.txt')))
+    #spelltest(Testset(open('spell-testset2.txt')))
