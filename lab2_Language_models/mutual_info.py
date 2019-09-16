@@ -64,4 +64,3 @@ if __name__ == '__main__':
         print(mi[bigram], '\t', bigram, '\t',
               frequency[bigram[0]], '\t',
               frequency[bigram[1]], '\t',
-              frequency_bigrams[bigram])
