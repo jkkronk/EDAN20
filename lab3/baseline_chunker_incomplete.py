@@ -30,12 +30,45 @@ def train(corpus):
     :param corpus:
     :return:
     """
-    pos_cnt = count_pos(corpus)
-    # We compute the chunk distribution by POS
-    chunk_dist = {key: {} for key in pos_cnt.keys()}
+
     """
     Fill in code to compute the chunk distribution for each part of speech
     """
+    pos_cnt = count_pos(corpus)
+    # We compute the chunk distribution by POS
+    chunk_dist = {key: {} for key in pos_cnt.keys()}
+    chunk_len = len(chunk_dist.keys())
+
+    #print(pos_cnt)
+
+    # Hur många gånger finns tex NN för varje chunk
+    for sentence in corpus:
+        for row in sentence:
+            #print(row['pos'])
+            if row == {}:
+                continue
+            if row['chunk'] in chunk_dist[row['pos']]:
+                chunk_dist[row['pos']][row['chunk']] += 1
+            else:
+                chunk_dist[row['pos']][row['chunk']] = 1
+
+
+    # Exempel på sidan
+    print(chunk_dist['JJR'])
+    # {'B-NP': 382, 'B-ADJP': 111, 'I-ADJP': 45, 'B-ADVP': 63, 'I-ADVP': 17, 'B-VP': 2, 'I-NP': 204, 'I-VP': 11, 'O': 16, 'B-PP': 2}
+
+    """
+
+    weigh = 0
+    for count in pos_cnt:
+        weigh = weigh + pos_cnt[count]
+
+    # Calc % occurences of each part
+    for chunk in chunk_dist:
+        chunk_dist[chunk] = pos_cnt[chunk] / weigh
+
+    """
+
 
     # We determine the best association
     pos_chunk = {}
@@ -44,6 +77,18 @@ def train(corpus):
     You will build a dictionary with key values:
     pos_chunk[pos] = most frequent chunk for pos
     """
+    pos_chunk = {key: '' for key in pos_cnt.keys()}
+
+    for pos in chunk_dist:
+        max_value = 0
+        max_chunk = ''
+        for chunk in chunk_dist[pos]:
+            #print(chunk_dist[pos][chunk], 'dawdawda')
+            value = chunk_dist[pos][chunk]
+            if value > max_value:
+                max_value = value
+                max_chunk = chunk
+        pos_chunk[pos] = max_chunk
     return pos_chunk
 
 
@@ -92,6 +137,8 @@ if __name__ == '__main__':
 
     model = train(train_corpus)
 
+    # Exemepl från sidan
+    print(model['NN'], 'hej')
     predicted = predict(model, test_corpus)
     accuracy = eval(predicted)
     print("Accuracy", accuracy)
